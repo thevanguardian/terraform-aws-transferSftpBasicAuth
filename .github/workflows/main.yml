@@ -1,0 +1,19 @@
+name: Increment Release Tags
+on:
+  release:
+    types: [published]
+
+jobs:
+  run:
+    name: Run local action
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Actions Tagger
+        uses: thevanguardian/actions-tagger@v2.0.2
+        with:
+          publish_latest_tag: true
