@@ -29,7 +29,7 @@ Sets up a Transfer SFTP system with a custom identity provider run through API G
 
 ```hcl
 module "this" {
-  source           = "thevanguardian/generateIamRole/aws"
+  source           = "thevanguardian/transferSftpBasicAuth/aws"
   version          = "1.0.2"
   storageBackend   = "efs"
   secretsBackend   = "ssm"
