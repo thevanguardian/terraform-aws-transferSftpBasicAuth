@@ -1,7 +1,7 @@
 module "S3BucketAccess-IAM" {
   count          = lower(var.storageBackend) == "s3" ? 1 : 0
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.1"
+  source         = "thevanguardian/generateIamRole/aws"
+  version        = "2.0.1"
   roleNamePrefix = "S3BucketAccess-"
   rolePath       = "/service/transfer/"
   assumeConfig = {
@@ -22,8 +22,8 @@ module "S3BucketAccess-IAM" {
 
 module "EFSAccess-IAM" {
   count          = lower(var.storageBackend) == "efs" ? 1 : 0
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.1"
+  source         = "thevanguardian/generateIamRole/aws"
+  version        = "2.0.1"
   roleNamePrefix = "EFSAccess-"
   rolePath       = "/service/transfer/"
   assumeConfig = {
@@ -43,8 +43,8 @@ module "EFSAccess-IAM" {
 }
 
 module "TransferIdentityProvider-IAM" {
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.1"
+  source         = "thevanguardian/generateIamRole/aws"
+  version        = "2.0.1"
   roleNamePrefix = "TransferIdentityProvider-"
   rolePath       = "/service/transfer/"
   assumeConfig = {
@@ -68,8 +68,8 @@ module "TransferIdentityProvider-IAM" {
 }
 
 module "APICloudWatchLogs-IAM" {
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.1"
+  source         = "thevanguardian/generateIamRole/aws"
+  version        = "2.0.1"
   roleNamePrefix = "APICloudWatchLogs-"
   rolePath       = "/service/transfer/"
   assumeConfig = {
@@ -91,8 +91,8 @@ module "APICloudWatchLogs-IAM" {
 }
 
 module "LambdaExecution-IAM" {
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.1"
+  source          = "thevanguardian/generateIamRole/aws"
+  version         = "2.0.1"
   roleNamePrefix  = "LambdaExecution-"
   rolePath        = "/service/transfer/"
   managedPolicies = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
