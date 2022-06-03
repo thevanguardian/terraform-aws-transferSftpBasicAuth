@@ -134,6 +134,11 @@ resource "aws_api_gateway_integration_response" "get_user_config" {
   resource_id = aws_api_gateway_resource.config.id
   http_method = aws_api_gateway_method.get_user_config.http_method
   status_code = aws_api_gateway_method_response.get_user_config.status_code
+  lifecycle {
+    depends_on = [
+      aws_api_gateway_integration.get_user_config
+    ]
+  }
 }
 resource "aws_api_gateway_method_response" "get_user_config" {
   rest_api_id = aws_api_gateway_rest_api.custom_identity.id

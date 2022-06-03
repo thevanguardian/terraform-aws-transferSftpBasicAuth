@@ -8,6 +8,7 @@ resource "aws_secretsmanager_secret_version" "default_users_config" {
   secret_id = "${aws_transfer_server.sftp.id}/${each.key}"
   secret_string = jsonencode({
     "Password" : "",
+    "PosixProfile" : "{\"Uid\": 1000, \"Gid\": 1000, \"SecondaryGids\": []}",
     "Role" : "${local.storage_role}",
     "PublicKeys" : "",
     "HomeDirectoryDetails" : "[{\"Entry\": \"/\", \"Target\": \"/${local.storage_id}/$${Transfer:UserName}\"}]"
@@ -29,11 +30,11 @@ resource "aws_ssm_parameter" "default_users_config" {
   overwrite   = true
   value = jsonencode({
     "Password" : "",
+    "PosixProfile" : "{\"Uid\": 1000, \"Gid\": 1000, \"SecondaryGids\": []}",
     "Role" : "${local.storage_role}",
     "PublicKeys" : "",
     "HomeDirectoryDetails" : "[{\"Entry\": \"/\", \"Target\": \"/${local.storage_id}/$${Transfer:UserName}\"}]"
   })
-
   lifecycle {
     ignore_changes = [
       value
