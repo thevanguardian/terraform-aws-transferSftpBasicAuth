@@ -26,9 +26,10 @@ resource "aws_api_gateway_deployment" "custom_identity" {
   }
 }
 resource "aws_api_gateway_stage" "custom_identity" {
-  rest_api_id   = aws_api_gateway_rest_api.custom_identity.id
-  deployment_id = aws_api_gateway_deployment.custom_identity.id
-  stage_name    = "prod"
+  rest_api_id          = aws_api_gateway_rest_api.custom_identity.id
+  deployment_id        = aws_api_gateway_deployment.custom_identity.id
+  stage_name           = "prod"
+  xray_tracing_enabled = var.enableXrayTracing
   lifecycle {
     ignore_changes = [
       cache_cluster_size
