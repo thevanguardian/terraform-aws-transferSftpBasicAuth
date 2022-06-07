@@ -6,12 +6,32 @@ locals {
 variable "defaultSftpUsers" {
   type        = list(string)
   default     = []
-  description = "default_sftp_users (list): Defaults to empty, populate with list of usernames. These will be setup for basic authentication by default, refer to the README for alternative authentication methods."
+  description = "defaultSftpUsers (list): Defaults to empty, populate with list of usernames. These will be setup for basic authentication by default, refer to the README for alternative authentication methods."
 }
 variable "parameterStorePathPrefix" {
   type        = string
   default     = "/transfer/application/"
-  description = "parameter_store_path_prefix (string): Default path to populate into Lambda and IAM for permissions / resource pathing."
+  description = "parameterStorePathPrefix (string): Default path to populate into Lambda and IAM for permissions / resource pathing."
+  validation {
+    condition     = can(regex("^/.*/$", var.parameterStorePathPrefix))
+    error_message = "Variable parameterStorePathPrefix must begin and end with '/'."
+  }
+}
+
+variable "enableXrayTracing" {
+  type        = bool
+  default     = false
+  description = "enableXrayTracing (bool): Whether to enable Xray Tracing for supported services."
+}
+
+variable "xrayTracingMode" {
+  type        = string
+  default     = "PassThrough"
+  description = "xrayTracingMode (string): Defaults to 'PassThrough', valid options are 'PassThrough' & 'Active'."
+  validation {
+    condition     = contains(["PassThrough", "Active"], var.xrayTracingMode)
+    error_message = "Variable xrayTracingMode supported values: PassThrough / Active"
+  }
 }
 
 variable "storageBackend" {
@@ -19,7 +39,7 @@ variable "storageBackend" {
   default     = "s3"
   description = "storageBackend (string): Defaults to 's3', valid options are 's3' & 'efs'."
   validation {
-    condition     = lower(var.storageBackend) == "efs" || lower(var.storageBackend) == "s3"
+    condition     = contains(["efs", "s3"], lower(var.storageBackend))
     error_message = "Variable storageBackend supports values of either 's3' or 'efs'."
   }
 }
@@ -29,7 +49,7 @@ variable "secretsBackend" {
   default     = "ssm"
   description = "secretsBackend (string): Defaults to 'ssm', valid options are 'ssm' & 'secretsmanager'."
   validation {
-    condition     = lower(var.secretsBackend) == "ssm" || lower(var.secretsBackend) == "secretsmanager"
+    condition     = contains(["ssm", "secretsmanager"], lower(var.secretsBackend))
     error_message = "Variable secretsBackend supports values of either 'ssm' or 'secretsmanager'."
   }
 }
@@ -57,6 +77,10 @@ variable "vpcId" {
 variable "subnetIds" {
   type        = list(any)
   description = "subnetIds (list): List of subnet id's to be used."
+  validation {
+    condition     = can([for subnet in var.subnetIds : regex("^subnet-[[:alnum:]]*", subnet)])
+    error_message = "Variable subnetIds requires a list of valid subnet id's."
+  }
 }
 
 variable "serviceName" {

@@ -29,6 +29,12 @@ resource "aws_lambda_function" "get_user_config" {
       security_group_ids = [aws_security_group.lambda-efs[0].id]
     }
   }
+  dynamic "tracing_config" {
+    for_each = var.enableXrayTracing ? toset([var.enableXrayTracing]) : []
+    content {
+      mode = var.xrayTracingMode
+    }
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway" {
